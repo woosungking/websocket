@@ -1,6 +1,7 @@
 package org.example.backend.domain.message.controller;
 
 import org.example.backend.domain.message.dto.RequestMessage;
+import org.example.backend.domain.message.dto.ResponseMessage;
 import org.example.backend.domain.message.service.MessageService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,7 +18,11 @@ public class MessageSocketController {
 
 	@MessageMapping("/{roomId}")
 	@SendTo("/room/{roomId}")
-	public void enter(@DestinationVariable("roomId") Long roomId, RequestMessage message){
+	public ResponseMessage enter(@DestinationVariable("roomId") Long roomId, RequestMessage message){
 	messageService.saveMessage(message.getContent(), message.getSender(),roomId);
+		ResponseMessage responseMessage = new ResponseMessage();
+		responseMessage.setContent(message.getContent());
+		responseMessage.setSender(message.getSender());
+	return responseMessage;
 	};
 }

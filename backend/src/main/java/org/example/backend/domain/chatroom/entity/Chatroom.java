@@ -24,7 +24,10 @@ public class Chatroom {
 
 	private String name;
 
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	// @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	// // @OneToMany(mappedBy = "chatroom", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	// private List<Message> messages = new ArrayList<>();
+	@OneToMany(mappedBy = "chatroom", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages = new ArrayList<>();
 
 	// 기본 생성자
@@ -62,14 +65,15 @@ public class Chatroom {
 	}
 
 	// 메시지 추가 메서드
+
 	public void addMessage(Message message) {
 		messages.add(message);
-		message.setChatRoom(this);
+		message.setChatroom(this);
 	}
 
 	// 메시지 제거 메서드
 	public void removeMessage(Message message) {
 		messages.remove(message);
-		message.setChatRoom(null);
+		message.setChatroom(this);
 	}
 }

@@ -2,12 +2,12 @@ package org.example.backend.domain.message.entity;
 
 import org.example.backend.domain.chatroom.entity.Chatroom;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -21,18 +21,19 @@ public class Message {
 
 	private String sender;
 
-	@ManyToOne
-	private Chatroom chatRoom;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "chatroom_id")
+	private Chatroom chatroom; // 수정된 부분
 
 	// 기본 생성자
 	public Message() {}
 
 	// 모든 필드를 받는 생성자
-	public Message(Long id, String content, String sender, Chatroom chatRoom) {
+	public Message(Long id, String content, String sender, Chatroom chatroom) { // 수정된 부분
 		this.id = id;
 		this.content = content;
 		this.sender = sender;
-		this.chatRoom = chatRoom;
+		this.chatroom = chatroom; // 수정된 부분
 	}
 
 	// id Getter
@@ -65,13 +66,13 @@ public class Message {
 		this.sender = sender;
 	}
 
-	// chatRoom Getter
-	public Chatroom getChatRoom() {
-		return chatRoom;
+	// chatroom Getter // 수정된 부분
+	public Chatroom getChatroom() {
+		return chatroom; // 수정된 부분
 	}
 
-	// chatRoom Setter
-	public void setChatRoom(Chatroom chatRoom) {
-		this.chatRoom = chatRoom;
+	// chatroom Setter // 수정된 부분
+	public void setChatroom(Chatroom chatroom) {
+		this.chatroom = chatroom; // 수정된 부분
 	}
 }

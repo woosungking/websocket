@@ -13,9 +13,11 @@ const ChatPage: React.FC = () => {
 
     client.connect({}, (frame) => {
       console.log("Connected: " + frame);
-      setStompClient(client); // WebSocket 연결 후 상태 업데이트
 
-      // WebSocket 연결이 성공하면 메시지를 수신할 수 있는 핸들러 설정
+      // WebSocket 연결이 성공하면 stompClient를 상태에 저장
+      setStompClient(client);
+
+      // 메시지를 수신할 수 있는 핸들러 설정
       client.subscribe("/room/1", (msg) => {
         console.log("Received message:", msg.body);
       });
@@ -29,10 +31,10 @@ const ChatPage: React.FC = () => {
         });
       }
     };
-  }, [stompClient]); // stompClient를 의존성 배열에 추가하여 상태 업데이트 반영
+  }, []); // 빈 의존성 배열로 useEffect가 한 번만 실행되도록 설정
 
   const sendMessage = () => {
-    if (stompClient && stompClient.connected && message.trim()) {
+    if (stompClient) {
       // 채팅방 ID를 1로 가정
       const roomId = 1;
       stompClient.send(

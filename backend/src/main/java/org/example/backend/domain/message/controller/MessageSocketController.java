@@ -25,4 +25,12 @@ public class MessageSocketController {
 		responseMessage.setSender(message.getSender());
 	return responseMessage;
 	};
+
+	@MessageMapping("/realtime")
+	@SendTo("/room/realtime")
+	public ResponseMessage RealTimeMessage(ResponseMessage message){ResponseMessage responseMessage = new ResponseMessage();
+		responseMessage.setContent(message.getContent());
+		responseMessage.setSender(message.getSender());
+		return responseMessage;
+	}
 }

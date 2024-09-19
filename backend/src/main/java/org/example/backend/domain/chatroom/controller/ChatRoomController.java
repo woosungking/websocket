@@ -2,7 +2,7 @@ package org.example.backend.domain.chatroom.controller;
 
 import java.util.Optional;
 
-import org.example.backend.domain.chatroom.entity.Chatroom;
+import org.example.backend.domain.chatroom.dto.ResponseChatroom;
 import org.example.backend.domain.chatroom.service.ChatRoomService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +25,7 @@ public class ChatRoomController {
 	}
 
 	@GetMapping("/{chatroom_id}")
-	public Optional<Chatroom> getChatRoom(@PathVariable("chatroom_id") Long id){
+	public Optional<ResponseChatroom> getChatRoom(@PathVariable("chatroom_id") Long id){
 		return chatRoomService.getChatRoom(id);
 	}
 }

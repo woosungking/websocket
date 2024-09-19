@@ -1,8 +1,15 @@
 package org.example.backend.domain.chatroom.entity;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.example.backend.domain.message.entity.Message;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,17 +24,16 @@ public class Chatroom {
 
 	private String name;
 
-	@OneToMany(mappedBy = "chatRoom")
-	private List<Message> messages;
+	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Message> messages = new ArrayList<>();
 
 	// 기본 생성자
 	public Chatroom() {}
 
 	// 모든 필드를 받는 생성자
-	public Chatroom(Long id, String name, List<Message> messages) {
+	public Chatroom(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.messages = messages;
 	}
 
 	// id Getter
@@ -50,13 +56,20 @@ public class Chatroom {
 		this.name = name;
 	}
 
-	// messages Getter
+	// messages Getter (읽기 전용)
 	public List<Message> getMessages() {
-		return messages;
+		return Collections.unmodifiableList(messages);
 	}
 
-	// messages Setter
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
+	// 메시지 추가 메서드
+	public void addMessage(Message message) {
+		messages.add(message);
+		message.setChatRoom(this);
+	}
+
+	// 메시지 제거 메서드
+	public void removeMessage(Message message) {
+		messages.remove(message);
+		message.setChatRoom(null);
 	}
 }

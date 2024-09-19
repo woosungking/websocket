@@ -5,6 +5,6 @@ import java.util.List;
 import org.example.backend.domain.message.entity.Message;
 
 public interface MessageService {
-	public void saveMessage(String message, String sender);
+	public void saveMessage(String message, String sender, Long roomId);
 	public List<Message> getMessage();
 }

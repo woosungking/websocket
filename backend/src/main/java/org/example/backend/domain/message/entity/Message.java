@@ -1,6 +1,9 @@
 package org.example.backend.domain.message.entity;
 
 import org.example.backend.domain.chatroom.entity.Chatroom;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

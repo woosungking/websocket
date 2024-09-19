@@ -1,6 +1,5 @@
 package org.example.backend.common;
 
-import org.example.backend.domain.chatroom.controller.ChatRoomController;
 import org.example.backend.domain.chatroom.repository.ChatRoomRepository;
 import org.example.backend.domain.chatroom.service.ChatRoomService;
 import org.example.backend.domain.chatroom.service.ChatRoomServiceImpl;
@@ -13,10 +12,6 @@ import org.springframework.web.socket.WebSocketHandler;
 
 @Configuration
 public class AppConfig {
-	// @Bean
-	// public WebSocketHandler webSocketHandler(){
-	// 	return new org.example.backend.common.WebSocketHandler();
-	// }
 
 	@Bean
 	public ChatRoomService chatRoomService(ChatRoomRepository chatRoomRepository) {
@@ -24,7 +19,7 @@ public class AppConfig {
 	}
 
 	@Bean
-	public MessageService messageService(MessageRepository messageRepository) {
-		return new MessageServiceImpl(messageRepository);
+	public MessageService messageService(MessageRepository messageRepository, ChatRoomRepository chatRoomRepository) {
+		return new MessageServiceImpl(messageRepository,chatRoomRepository);
 	}}
 

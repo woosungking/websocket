@@ -9,6 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(new WebSocketHandler(),"/ws").setAllowedOrigins("http://localhost:5173");
+		registry.addHandler(new WebSocketHandler(),"/websocket").setAllowedOrigins("http://localhost:5173");
 	}
 }

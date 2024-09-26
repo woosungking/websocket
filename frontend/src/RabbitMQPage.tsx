@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 
-const ChatPage: React.FC = () => {
+const RabbitMQPage: React.FC = () => {
   const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<string[]>([]);
@@ -20,15 +20,15 @@ const ChatPage: React.FC = () => {
       setStompClient(client);
 
       // 메시지 구독
-      // client.subscribe(`/queue/room/${roomId}`) enableStompBroker에서 /topic /queue 를 정의했는데 둘중하나 써도 상관X 물론 관례적인 컨벤션이라 용도에 맞게!
-      client.subscribe(`/topic/${roomId}`, (msg) => {
+      // RabbitMQ의 exchange와 연결된 queue로 메시지를 수신
+      client.subscribe(`/topic/room.1`, (msg) => {
         console.log("Received message:", msg.body);
-
         try {
-          const parsedMessage = JSON.parse(msg.body);
-          console.log("Parsed message:", parsedMessage);
-          const messageContent = parsedMessage.content;
-          setMessages((prevMessages) => [...prevMessages, messageContent]);
+          console.log("메롱", msg.body);
+          // const parsedMessage = JSON.parse(msg.body);
+          // console.log("Parsed message:", parsedMessage);
+          // const messageContent = parsedMessage.content;
+          setMessages((prevMessages) => [...prevMessages, msg.body]);
         } catch (error) {
           console.error("Failed to parse message:", msg.body);
         }
@@ -50,22 +50,20 @@ const ChatPage: React.FC = () => {
     };
   }, [roomId]); // roomId가 변경될 때마다 useEffect가 실행되도록 설정
 
-  const sendMessage = () => {
+  const sendMessage = (e: ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+
     if (stompClient) {
       const newMessage = JSON.stringify({
         content: message,
         sender: user,
-      }); // 서버단에 RequestMessage 형식에 맞춘거임.
+      }); // 서버로 보낼 메시지 형식
 
       // 메시지 서버로 전송
-      stompClient.send(`/publish/${roomId}`, {}, newMessage);
-      //StompConfig에서 정의한
+      stompClient.send(`/publish/chat.enter.1`, {}, newMessage); // 컨트롤러 요청
 
       // 메시지를 전송 후 바로 화면에 표시
       setMessages((prevMessages) => [...prevMessages, message]);
-
-      // 입력 필드 초기화
-      setMessage("");
     }
   };
 
@@ -83,10 +81,10 @@ const ChatPage: React.FC = () => {
       <input
         type="text"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={sendMessage}
         placeholder="Type your message..."
       />
-      <button onClick={sendMessage}>Send</button>
+      <button onChange={sendMessage}>Send</button>
       <div>
         <label>
           Room ID:
@@ -109,4 +107,4 @@ const ChatPage: React.FC = () => {
   );
 };
 
-export default ChatPage;
+export default RabbitMQPage;

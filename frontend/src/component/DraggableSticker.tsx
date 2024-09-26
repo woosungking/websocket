@@ -1,8 +1,8 @@
 import React from "react";
 import Draggable from "react-draggable";
 
-const DraggableSticker = () => (
-  <Draggable>
+const DraggableSticker = ({ ondrag }) => (
+  <Draggable onDrag={ondrag}>
     <div className="w-24 h-24 bg-blue-300 text-white flex items-center justify-center rounded-lg cursor-move">
       후하
     </div>
